@@ -17,7 +17,9 @@ export async function sha3 (data: string | Buffer | ITypedArray, bits: IValidBit
     wasm = await WASMInterface(wasmJson, bits / 8);
   }
 
-  return wasm.hash(data, bits);
+  wasm.init(bits);
+  wasm.update(data);
+  return wasm.digest(0x06);
 }
 
 export async function createSHA3(bits: IValidBits = 512) {
@@ -31,7 +33,7 @@ export async function createSHA3(bits: IValidBits = 512) {
   return {
     init: () => wasm.init(bits),
     update: wasm.update,
-    digest: wasm.digest,
+    digest: () => wasm.digest(0x06),
   };
 };
 
