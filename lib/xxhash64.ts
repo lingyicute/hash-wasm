@@ -10,7 +10,7 @@ const seedBuffer = new ArrayBuffer(8);
 
 function validateSeed(seed: number) {
   if (!Number.isInteger(seed) || seed < 0 || seed > 0xFFFFFFFF) {
-    return new Error('Seed must be given as two valid 32-bit long unsigned integer (lo + high).');
+    return new Error('Seed must be given as two valid 32-bit long unsigned integers (lo + high).');
   }
   return null;
 }
