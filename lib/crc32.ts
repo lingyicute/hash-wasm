@@ -17,12 +17,12 @@ export function crc32(data: IDataType): Promise<string> {
     return lockedCreate(mutex, wasmJson, 4)
       .then((wasm) => {
         wasmCache = wasm;
-        return wasmCache.calculate(data);
+        return wasmCache.calculate(data, 0xEDB88320);
       });
   }
 
   try {
-    const hash = wasmCache.calculate(data);
+    const hash = wasmCache.calculate(data, 0xEDB88320);
     return Promise.resolve(hash);
   } catch (err) {
     return Promise.reject(err);
@@ -34,9 +34,9 @@ export function crc32(data: IDataType): Promise<string> {
  */
 export function createCRC32(): Promise<IHasher> {
   return WASMInterface(wasmJson, 4).then((wasm) => {
-    wasm.init();
+    wasm.init(0xEDB88320);
     const obj: IHasher = {
-      init: () => { wasm.init(); return obj; },
+      init: () => { wasm.init(0xEDB88320); return obj; },
       update: (data) => { wasm.update(data); return obj; },
       digest: (outputType) => wasm.digest(outputType) as any,
       save: () => wasm.save(),
